@@ -31,27 +31,11 @@ class BaseSite:
 
     def __init__(
             self,
-            browser: webdriver.chrome,
+            browser: webdriver.Chrome,
             authentication: Authentication,
-            login_elements: LoginElements,
-            login_url: str,
-            coupon_element: CouponElement,
-            coupons_url: str,
-            continue_button="",
-            continue_button_function=Callable,
-            site_name="BaseSite",
-            coupon_program_name="BaseSiteCoupons",
     ):
         self.browser = browser
         self.authentication = authentication
-        self.login_elements = login_elements
-        self.login_url = login_url
-        self.coupon_element = coupon_element
-        self.coupons_url = coupons_url
-        self.continue_button = continue_button
-        self.continue_button_function = continue_button_function
-        self.site_name = site_name
-        self.coupon_program_name = coupon_program_name
 
     def drive(self) -> None:
         self.login()
