@@ -1,6 +1,5 @@
 from collections import namedtuple
-from os import getcwd
-from time import sleep
+from os import getcwd, path
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, \
@@ -8,7 +7,7 @@ from selenium.common.exceptions import NoSuchElementException, StaleElementRefer
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as e_c
 from selenium.webdriver.support.wait import WebDriverWait
 
 import env
@@ -18,8 +17,8 @@ TextInput = namedtuple("TextInput", ["id", "keys"])
 
 def main():
     chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    browser = webdriver.Chrome(getcwd() + "/chromedriver", options=chrome_options)
+    # chrome_options.add_argument("--headless")
+    browser = webdriver.Chrome(path.join(getcwd(), env.CHROME_DRIVER_DIR, env.CHROME_DRIVER), options=chrome_options)
     browser = login(browser)
     browser = just4you(browser)
     browser.quit()
@@ -46,7 +45,7 @@ def just4you(browser: webdriver.Chrome) -> webdriver.Chrome:
         return button.text == env.add_button_text and button.is_displayed()
 
     try:
-        WebDriverWait(browser, 3).until(EC.presence_of_element_located((By.ID, env.sign_in_button_id)))
+        WebDriverWait(browser, 3).until(e_c.presence_of_element_located((By.ID, env.sign_in_button_id)))
         print("Home Page Loaded")
     except TimeoutException:
         print("Home Page Took Too Long")
