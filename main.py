@@ -1,6 +1,7 @@
 from collections import namedtuple
 from os import getcwd, path
-
+import logging
+import logging.config
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, \
     ElementClickInterceptedException, TimeoutException
@@ -14,6 +15,9 @@ import env
 
 TextInput = namedtuple("TextInput", ["id", "keys"])
 
+logging.config.fileConfig(fname="logger.ini", disable_existing_loggers=False)
+logger = logging.getLogger(__name__)
+
 
 def main():
     chrome_options = Options()
@@ -25,6 +29,7 @@ def main():
 
 
 def login(browser: webdriver.Chrome) -> webdriver.Chrome:
+    logger.info("Logging In")
     text_inputs = [TextInput(env.email_text_entry_id, env.email),
                    TextInput(env.password_text_entry_id, env.password)]
 
@@ -36,19 +41,21 @@ def login(browser: webdriver.Chrome) -> webdriver.Chrome:
         element.send_keys(text_input.keys)
 
     browser.find_element_by_id(env.sign_in_submit_id).click()
-    print("Logged In")
+    logger.info("Logged In")
     return browser
 
 
 def just4you(browser: webdriver.Chrome) -> webdriver.Chrome:
+    logger.info("Starting Just4U")
+
     def is_add_button(button: WebElement) -> bool:
         return button.text == env.add_button_text and button.is_displayed()
 
     try:
         WebDriverWait(browser, 3).until(e_c.presence_of_element_located((By.ID, env.sign_in_button_id)))
-        print("Home Page Loaded")
+        logger.info("Home Page Loaded")
     except TimeoutException:
-        print("Home Page Took Too Long")
+        logger.critical("Home Page Took Too Long")
         exit(1)
     browser.get(env.VONS_JUST_4_U_Link)
     try:
@@ -64,26 +71,31 @@ def just4you(browser: webdriver.Chrome) -> webdriver.Chrome:
                 buttons_clicked += 1
             if load_more_button.is_displayed():
                 load_more_button.click()
-                print(f"Clicking Load More, clicked {buttons_clicked}")
+                logger.info(f"Clicking Load More, clicked {buttons_clicked}")
             else:
                 break
             load_more_button = browser.find_element_by_class_name(env.load_more_button_class)
     except NoSuchElementException:
-        print("Finished adding all items")
+        logger.info("Finished adding all items")
         # Finished clicking all the deals
         pass
     except StaleElementReferenceException:
         env.MAX_REFRESHES -= 1
         if env.MAX_REFRESHES > 0:
-            print("Stale Button, Refreshing")
+            logger.warning("Stale Button, Refreshing")
             return just4you(browser)
+        else:
+            logger.error("Stale Button, Max Retries Hit")
     except ElementClickInterceptedException:
         env.MAX_REFRESHES -= 1
         if env.MAX_REFRESHES > 0:
-            print("Click Intercepted, Refreshing")
+            logger.warning("Click Intercepted, Refreshing")
             return just4you(browser)
+        else:
+            logger.error("Click Intercepted, Max Retries Hit")
     return browser
 
 
 if __name__ == '__main__':
+    logger.info("Starting Just4Me")
     main()
