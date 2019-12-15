@@ -2,7 +2,8 @@ import logging
 from collections import namedtuple
 from typing import Callable, List
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException, \
+    ElementClickInterceptedException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
@@ -39,6 +40,10 @@ class BaseSite:
     browser: webdriver.Chrome
 
     total_coupons = 0
+    times_load_more = 0
+    load_more_log_frequency = 5
+
+    max_retries = 5
 
     def __init__(
             self,
@@ -51,7 +56,13 @@ class BaseSite:
     def drive(self) -> None:
         self.login()
         self.wait_for_site_load()
+        self.go_to_coupon_site()
         self.click_coupons()
+        while self.load_more():
+            self.click_coupons()
+        logger.info(f"Loaded More {self.times_load_more} times total for Site: {self.site_name}")
+        logger.info(f"Clicked {self.total_coupons} total coupons on Site: {self.site_name}")
+        self.browser.quit()
 
     def login(self) -> None:
         logger.info(f"Attempting to log into Site: {self.site_name}")
@@ -73,10 +84,14 @@ class BaseSite:
                 (self.post_login_element_function, self.post_login_element_info)))
         except TimeoutException:
             logger.critical(f"Post login page took too long to load for Site: {self.site_name}")
-            raise TimeoutException
-        logger.info(f"Successfully loaded after log for Site: {self.site_name}")
+            self.__quit_browser__()
+        logger.info(f"Successfully loaded after log in for Site: {self.site_name}")
 
-    def click_coupons(self):
+    def go_to_coupon_site(self) -> None:
+        logger.info(f"Going starting program {self.coupon_program_name} on Site: {self.site_name}")
+        self.browser.get(self.coupons_url)
+
+    def click_coupons(self) -> None:
 
         def get_active_coupon_elements() -> List[WebElement]:
             def is_active_coupon_element(button: WebElement) -> bool:
@@ -85,12 +100,55 @@ class BaseSite:
             coupon_elements = self.browser.find_elements_by_class_name(self.coupon_element.coupon_button_class)
             return [button for button in coupon_elements if is_active_coupon_element(button)]
 
-        logger.info(f"Clicking coupons on Site: {self.site_name}")
+        logger.debug(f"Clicking coupons on Site: {self.site_name}")
         coupons_clicked = 0
-        self.browser.get(self.coupons_url)
         active_coupon_elements = get_active_coupon_elements()
         for coupon_element in active_coupon_elements:
             coupon_element.click()
             coupons_clicked += 1
         self.total_coupons += coupons_clicked
-        logger.info(f"Clicked {coupons_clicked} coupons on Site: {self.site_name}")
+        logger.debug(f"Clicked {coupons_clicked} coupons on Site: {self.site_name}")
+
+    def load_more(self) -> bool:
+        logger.debug(f"Attempting to load more on Site: {self.site_name}")
+        try:
+            load_element: WebElement = self.continue_button_function(self.continue_button_info)
+            if load_element.is_displayed():
+                load_element.click()
+                logger.debug(f"Successfully loaded more on Site: {self.site_name}")
+                self.times_load_more += 1
+                self.__load_more_logger_helper__()
+            else:
+                logger.error(f"Load more button not displayed on Site: {self.site_name}")
+            return True
+        except NoSuchElementException:
+            logger.warning(f"Failed to load more on Site: {self.site_name}")
+            return False
+        except AttributeError:
+            necessary_attributes = ["continue_button_function", "continue_button_info"]
+            logger.warning(f"Missing attributes needed  {' or '.join(necessary_attributes)} for Site: {self.site_name}")
+            return False
+        except StaleElementReferenceException:
+            self.__coupon_site_refresh__("StaleElementReference")
+        except ElementClickInterceptedException:
+            self.__coupon_site_refresh__("ElementClickIntercepted")
+
+    def __coupon_site_refresh__(self, reason: str):
+
+        def base_msg():
+            return f"{self.coupons_url} for Site: {self.site_name} due to {reason}"
+
+        self.max_retries -= 1
+        if self.max_retries > 0:
+            logger.warning(f"Refreshing {base_msg()}")
+        else:
+            logger.error(f"Max Retries hit for url: {base_msg()}")
+            self.__quit_browser__()
+
+    def __load_more_logger_helper__(self):
+        if self.times_load_more % self.load_more_log_frequency == 0:
+            logger.info(f"Loaded more {self.times_load_more} times for Site: {self.site_name}")
+
+    def __quit_browser__(self):
+        logger.info("Quitting Browser")
+        self.browser.quit()
