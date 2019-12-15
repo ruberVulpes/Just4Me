@@ -1,4 +1,8 @@
+# Added by wFox
+# Pycharm
 .idea
+# Logging
+/just4me.log
 
 # Created by https://www.gitignore.io/api/venv,macos,python,pycharm
 # Edit at https://www.gitignore.io/?templates=venv,macos,python,pycharm
