@@ -23,6 +23,7 @@ def main():
     # chrome_options.add_argument("--headless")
     browser = webdriver.Chrome(path.join(getcwd(), env.CHROME_DRIVER_DIR, env.CHROME_DRIVER), options=chrome_options)
     browser = login(browser)
+    wait_for_home_load(browser)
     browser = just4you(browser)
     browser.quit()
 
@@ -44,18 +45,22 @@ def login(browser: webdriver.Chrome) -> webdriver.Chrome:
     return browser
 
 
+def wait_for_home_load(browser: webdriver.Chrome) -> None:
+    logger.info("Waiting for Home Page to be Loaded")
+    try:
+        WebDriverWait(browser, 3).until(e_c.presence_of_element_located((By.ID, env.sign_in_button_id)))
+        logger.info("Home Page Loaded")
+    except TimeoutException:
+        logger.critical("Home Page Took Too Long to load, quitting")
+        exit(1)
+
+
 def just4you(browser: webdriver.Chrome) -> webdriver.Chrome:
     logger.info("Starting Just4U")
 
     def is_add_button(button: WebElement) -> bool:
         return button.text == env.add_button_text and button.is_displayed()
 
-    try:
-        WebDriverWait(browser, 3).until(e_c.presence_of_element_located((By.ID, env.sign_in_button_id)))
-        logger.info("Home Page Loaded")
-    except TimeoutException:
-        logger.critical("Home Page Took Too Long")
-        exit(1)
     browser.get(env.VONS_JUST_4_U_Link)
     try:
         load_more_button = browser.find_element_by_class_name(env.load_more_button_class)
