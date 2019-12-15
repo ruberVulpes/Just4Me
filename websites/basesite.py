@@ -38,6 +38,8 @@ class BaseSite:
 
     browser: webdriver.Chrome
 
+    total_coupons = 0
+
     def __init__(
             self,
             browser: webdriver.Chrome,
@@ -90,4 +92,5 @@ class BaseSite:
         for coupon_element in active_coupon_elements:
             coupon_element.click()
             coupons_clicked += 1
+        self.total_coupons += coupons_clicked
         logger.info(f"Clicked {coupons_clicked} coupons on Site: {self.site_name}")
