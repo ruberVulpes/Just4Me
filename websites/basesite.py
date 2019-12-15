@@ -34,8 +34,8 @@ class BaseSite:
             coupons_url: str,
             continue_button="",
             continue_button_function=Callable,
-            site_name="",
-            coupon_program_name="",
+            site_name="BaseSite",
+            coupon_program_name="BaseSiteCoupons",
     ):
         self.browser = browser
         self.authentication = authentication
