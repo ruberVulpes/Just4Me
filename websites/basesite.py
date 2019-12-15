@@ -1,8 +1,9 @@
 import logging
 from collections import namedtuple
-from typing import Callable
+from typing import Callable, List
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
@@ -48,6 +49,7 @@ class BaseSite:
     def drive(self) -> None:
         self.login()
         self.wait_for_site_load()
+        self.click_coupons()
 
     def login(self) -> None:
         logger.info(f"Attempting to log into Site: {self.site_name}")
@@ -71,3 +73,21 @@ class BaseSite:
             logger.critical(f"Post login page took too long to load for Site: {self.site_name}")
             raise TimeoutException
         logger.info(f"Successfully loaded after log for Site: {self.site_name}")
+
+    def click_coupons(self):
+
+        def get_active_coupon_elements() -> List[WebElement]:
+            def is_active_coupon_element(button: WebElement) -> bool:
+                return button.is_displayed() and button.text == self.coupon_element.coupon_button_text
+
+            coupon_elements = self.browser.find_elements_by_class_name(self.coupon_element.coupon_button_class)
+            return [button for button in coupon_elements if is_active_coupon_element(button)]
+
+        logger.info(f"Clicking coupons on Site: {self.site_name}")
+        coupons_clicked = 0
+        self.browser.get(self.coupons_url)
+        active_coupon_elements = get_active_coupon_elements()
+        for coupon_element in active_coupon_elements:
+            coupon_element.click()
+            coupons_clicked += 1
+        logger.info(f"Clicked {coupons_clicked} coupons on Site: {self.site_name}")
