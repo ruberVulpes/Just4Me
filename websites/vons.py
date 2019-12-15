@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.common.by import By
 
 from websites.basesite import BaseSite, Authentication, LoginElements, CouponElement
 
@@ -15,6 +16,11 @@ class Vons(BaseSite):
     coupons_url = "https://www.vons.com/justforu/coupons-deals.html"
     continue_button_info = "load-more-container"
     continue_button_function = WebDriver.find_element_by_class_name
+
+    post_login_element_info = "sign-in-profile-text"
+    post_login_element_function = By.ID
+
+    time_out = 3
 
     def __init__(
             self,
