@@ -1,6 +1,5 @@
 from os import environ
 
-
 # region Environment
 MAX_REFRESHES = 5
 CHROME_DRIVER = "win_chromedriver" if environ.get("env") == "windows" else "mac_chromedriver"
