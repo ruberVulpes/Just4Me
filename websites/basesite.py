@@ -22,11 +22,11 @@ class BaseSite:
 
     authentication: Authentication
 
-    web_driver: webdriver.Chrome
+    browser: webdriver.Chrome
 
     def __init__(
             self,
-            web_driver: webdriver.chrome,
+            browser: webdriver.chrome,
             authentication: Authentication,
             login_elements: LoginElements,
             login_url: str,
@@ -37,7 +37,7 @@ class BaseSite:
             site_name="",
             coupon_program_name="",
     ):
-        self.web_driver = web_driver
+        self.browser = browser
         self.authentication = authentication
         self.login_elements = login_elements
         self.login_url = login_url
