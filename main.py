@@ -1,6 +1,5 @@
 from collections import namedtuple
 from os import getcwd, path
-import logging
 import logging.config
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, \
