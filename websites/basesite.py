@@ -2,6 +2,9 @@ import logging
 from collections import namedtuple
 from typing import Callable
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions
 
 LoginElements = namedtuple("LoginElements", ["email_entry_id", "password_entry_id", "sign_in_submit_id"])
 CouponElement = namedtuple("CouponElements", ["coupon_button_class", "coupon_button_text"])
@@ -22,6 +25,11 @@ class BaseSite:
     login_elements: LoginElements
     coupon_element: CouponElement
 
+    post_login_element_info: str
+    post_login_element_function: Callable
+
+    time_out: int
+
     continue_button_info: str
     continue_button_function: Callable
 
@@ -39,6 +47,7 @@ class BaseSite:
 
     def drive(self) -> None:
         self.login()
+        self.wait_for_site_load()
 
     def login(self) -> None:
         logger.info(f"Attempting to log into Site: {self.site_name}")
@@ -52,3 +61,13 @@ class BaseSite:
         logger.info(f"Filled user info for Site: {self.site_name}")
         self.browser.find_element_by_id(self.login_elements.sign_in_submit_id).click()
         logger.info(f"Successfully Logged into Site: {self.site_name}")
+
+    def wait_for_site_load(self) -> None:
+        logger.info(f"Waiting for site load for Site: {self.site_name}")
+        try:
+            WebDriverWait(self.browser, self.time_out).until(expected_conditions.presence_of_element_located(
+                (self.post_login_element_function, self.post_login_element_info)))
+        except TimeoutException:
+            logger.critical(f"Post login page took too long to load for Site: {self.site_name}")
+            raise TimeoutException
+        logger.info(f"Successfully loaded after log for Site: {self.site_name}")
