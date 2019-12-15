@@ -15,7 +15,6 @@ class Vons(BaseSite):
     coupon_element = CouponElement("grid-coupon-clip-button", "ADD")
     coupons_url = "https://www.vons.com/justforu/coupons-deals.html"
     continue_button_info = "load-more-container"
-    continue_button_function = WebDriver.find_element_by_class_name
 
     post_login_element_info = "sign-in-profile-text"
     post_login_element_function = By.ID
@@ -27,4 +26,5 @@ class Vons(BaseSite):
             browser: webdriver.Chrome,
             authentication: Authentication,
     ):
+        self.continue_button_function = browser.find_element_by_class_name
         super().__init__(browser, authentication)
