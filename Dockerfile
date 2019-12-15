@@ -6,4 +6,4 @@ RUN pip3 install -r requirements.txt
 
 ADD . /
 
-CMD ["python", "main.py"]
+CMD ["python", "just4Me.py"]
