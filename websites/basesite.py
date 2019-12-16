@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class BaseSite:
     site_name: str
     coupon_program_name: str
-
+    home_url: str
     login_url: str
     coupons_url: str
 
@@ -146,7 +146,8 @@ class BaseSite:
         self.max_retries -= 1
         if self.max_retries > 0:
             logger.warning(f"Refreshing {base_msg()}")
-            self.browser.refresh()
+            self.browser.get(self.home_url)
+            self.browser.get(self.coupons_url)
             return True
         else:
             logger.error(f"Max Retries hit for url: {base_msg()}")
