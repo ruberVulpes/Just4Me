@@ -19,7 +19,7 @@ def main():
     chrome_options = Options()
     # chrome_options.add_argument("--headless")
     browser = webdriver.Chrome(path.join(getcwd(), env.CHROME_DRIVER_DIR, env.CHROME_DRIVER), options=chrome_options)
-    site = Vons(browser, authentication=Authentication(env.email, env.password))
+    site = Vons(browser, authentication=Authentication(*env.vons_auth))
     site.drive()
 
 
