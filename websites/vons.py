@@ -7,7 +7,7 @@ from websites.basesite import BaseSite, Authentication, LoginElements, CouponEle
 class Vons(BaseSite):
     site_name = "Vons"
     coupon_program_name = "just4U"
-
+    home_url = "https://www.vons.com/home.html"
     login_url = "https://www.vons.com/account/sign-in.html"
     login_elements = LoginElements("label-email", "label-password", "btnSignIn")
 
