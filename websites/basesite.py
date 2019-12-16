@@ -103,9 +103,14 @@ class BaseSite:
         logger.debug(f"Clicking coupons on Site: {self.site_name}")
         coupons_clicked = 0
         active_coupon_elements = get_active_coupon_elements()
-        for coupon_element in active_coupon_elements:
-            coupon_element.click()
-            coupons_clicked += 1
+        try:
+            for coupon_element in active_coupon_elements:
+                coupon_element.click()
+                coupons_clicked += 1
+        except StaleElementReferenceException:
+            self.__coupon_site_refresh__("StaleElementReference")
+        except ElementClickInterceptedException:
+            self.__coupon_site_refresh__("ElementClickIntercepted")
         self.total_coupons += coupons_clicked
         logger.debug(f"Clicked {coupons_clicked} coupons on Site: {self.site_name}")
 
@@ -141,6 +146,7 @@ class BaseSite:
         self.max_retries -= 1
         if self.max_retries > 0:
             logger.warning(f"Refreshing {base_msg()}")
+            self.browser.refresh()
         else:
             logger.error(f"Max Retries hit for url: {base_msg()}")
             self.__quit_browser__()
