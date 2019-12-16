@@ -30,7 +30,6 @@ class BaseSite:
     post_login_element_info: str
     post_login_element_function: Callable
 
-
     continue_button_info: str
     continue_button_function: Callable
 
