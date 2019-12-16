@@ -134,27 +134,29 @@ class BaseSite:
             logger.warning(f"Missing attributes needed  {' or '.join(necessary_attributes)} for Site: {self.site_name}")
             return False
         except StaleElementReferenceException:
-            self.__coupon_site_refresh__("StaleElementReference")
+            return self.__coupon_site_refresh__("StaleElementReference")
         except ElementClickInterceptedException:
-            self.__coupon_site_refresh__("ElementClickIntercepted")
+            return self.__coupon_site_refresh__("ElementClickIntercepted")
 
-    def __coupon_site_refresh__(self, reason: str):
+    def __coupon_site_refresh__(self, reason: str) -> bool:
 
-        def base_msg():
+        def base_msg() -> str:
             return f"{self.coupons_url} for Site: {self.site_name} due to {reason}"
 
         self.max_retries -= 1
         if self.max_retries > 0:
             logger.warning(f"Refreshing {base_msg()}")
             self.browser.refresh()
+            return True
         else:
             logger.error(f"Max Retries hit for url: {base_msg()}")
             self.__quit_browser__()
+            return False
 
-    def __load_more_logger_helper__(self):
+    def __load_more_logger_helper__(self) -> None:
         if self.times_load_more % self.load_more_log_frequency == 0:
             logger.info(f"Loaded more {self.times_load_more} times for Site: {self.site_name}")
 
-    def __quit_browser__(self):
+    def __quit_browser__(self) -> None:
         logger.info("Quitting Browser")
         self.browser.quit()
