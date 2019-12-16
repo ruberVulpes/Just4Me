@@ -18,8 +18,6 @@ class Vons(BaseSite):
     post_login_element_info = "sign-in-profile-text"
     post_login_element_function = By.ID
 
-    time_out = 3
-
     def __init__(
             self,
             browser: webdriver.Chrome,

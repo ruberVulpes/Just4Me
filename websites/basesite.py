@@ -30,7 +30,6 @@ class BaseSite:
     post_login_element_info: str
     post_login_element_function: Callable
 
-    time_out: int
 
     continue_button_info: str
     continue_button_function: Callable
@@ -43,6 +42,7 @@ class BaseSite:
     times_load_more = 0
     load_more_log_frequency = 5
 
+    time_out = 3
     max_retries = 5
 
     def __init__(
