@@ -65,7 +65,7 @@ class BaseSite:
 
     def login(self) -> None:
         logger.info(f"Attempting to log into Site: {self.site_name}")
-        self.browser.get(self.login_url)
+        self.__get_to_login_page__()
         text_inputs = [TextInput(self.login_elements.email_entry_id, self.authentication.email),
                        TextInput(self.login_elements.password_entry_id, self.authentication.password)]
         for text_input in text_inputs:
@@ -75,6 +75,9 @@ class BaseSite:
         logger.info(f"Filled user info for Site: {self.site_name}")
         self.browser.find_element_by_id(self.login_elements.sign_in_submit_id).click()
         logger.info(f"Successfully Logged into Site: {self.site_name}")
+
+    def __get_to_login_page__(self) -> None:
+        raise NotImplemented
 
     def wait_for_site_load(self) -> None:
         logger.info(f"Waiting for site load for Site: {self.site_name}")

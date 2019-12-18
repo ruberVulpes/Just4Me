@@ -25,3 +25,6 @@ class Vons(BaseSite):
     ):
         self.continue_button_function = browser.find_element_by_class_name
         super().__init__(browser, authentication)
+
+    def __get_to_login_page__(self) -> None:
+        self.browser.get(self.login_url)
