@@ -90,7 +90,7 @@ class BaseSite:
         logger.info(f"Successfully loaded after log in for Site: {self.site_name}")
 
     def go_to_coupon_site(self) -> None:
-        logger.info(f"Going starting program {self.coupon_program_name} on Site: {self.site_name}")
+        logger.info(f"Going to start program {self.coupon_program_name} on Site: {self.site_name}")
         self.browser.get(self.coupons_url)
 
     def click_coupons(self) -> None:
