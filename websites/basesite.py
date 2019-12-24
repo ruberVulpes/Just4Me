@@ -54,7 +54,8 @@ class BaseSite:
 
     def drive(self) -> None:
         self.login()
-        self.wait_for_site_load()
+        if not self.wait_for_site_load():
+            return
         self.go_to_coupon_site()
         self.click_coupons()
         while self.load_more():
@@ -79,7 +80,7 @@ class BaseSite:
     def __get_to_login_page__(self) -> None:
         raise NotImplemented
 
-    def wait_for_site_load(self) -> None:
+    def wait_for_site_load(self) -> bool:
         logger.info(f"Waiting for site load for Site: {self.site_name}")
         try:
             WebDriverWait(self.browser, self.time_out).until(expected_conditions.presence_of_element_located(
@@ -87,7 +88,9 @@ class BaseSite:
         except TimeoutException:
             logger.critical(f"Post login page took too long to load for Site: {self.site_name}")
             self.__quit_browser__()
+            return False
         logger.info(f"Successfully loaded after log in for Site: {self.site_name}")
+        return True
 
     def go_to_coupon_site(self) -> None:
         logger.info(f"Going to start program {self.coupon_program_name} on Site: {self.site_name}")
