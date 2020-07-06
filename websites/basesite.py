@@ -1,4 +1,5 @@
 import logging
+import time
 from collections import namedtuple
 from typing import Callable, List
 from selenium import webdriver
@@ -54,11 +55,12 @@ class BaseSite:
 
     def drive(self) -> None:
         self.login()
-        if not self.wait_for_site_load():
-            return
+        time.sleep(2)
         self.go_to_coupon_site()
+        time.sleep(2)
         self.click_coupons()
         while self.load_more():
+            time.sleep(0.5)
             self.click_coupons()
         logger.info(f"Loaded More {self.times_load_more} times total for Site: {self.site_name}")
         logger.info(f"Clicked {self.total_coupons} total coupons on Site: {self.site_name}")
