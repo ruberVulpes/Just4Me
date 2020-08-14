@@ -11,7 +11,7 @@ class Vons(BaseSite):
     login_url = "https://www.vons.com/account/sign-in.html"
     login_elements = LoginElements("label-email", "label-password", "btnSignIn")
 
-    coupon_element = CouponElement("grid-coupon-clip-button", "ADD")
+    coupon_element = CouponElement("grid-coupon-clip-button", "Clip Coupon")
     coupons_url = "https://www.vons.com/justforu/coupons-deals.html"
     continue_button_info = "load-more-container"
 
