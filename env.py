@@ -1,8 +1,8 @@
 import os
 
 # region Vons
-__vons_email__ = os.environ.get("vons_email")
-__vons_password__ = os.environ.get("vons_password")
+__vons_email__ = os.environ['vons_email']
+__vons_password__ = os.environ['vons_password']
 vons_auth = (__vons_email__, __vons_password__)
 # endregion
 
