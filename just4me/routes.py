@@ -1,5 +1,5 @@
 from threading import Thread
-
+from flask import render_template, url_for
 import env
 from just4me import app
 from just4me import just4me
@@ -9,7 +9,7 @@ from just4me.websites import Authentication
 @app.route(rule='/')
 @app.route(rule='/home')
 def home():
-    return 'Hello World'
+    return render_template('home.html')
 
 
 @app.route(rule='/vons')
@@ -17,7 +17,7 @@ def home():
 def vons():
     authentication = Authentication(*env.vons_auth)
     Thread(target=just4me.vons, args=(authentication,)).start()
-    return 'Running Vons Coupons with env.py'
+    return render_template('vons.html', title='Vons')
 
 
 @app.route(rule='/albertsons')
@@ -25,4 +25,4 @@ def vons():
 def albertsons():
     authentication = Authentication(*env.vons_auth)
     Thread(target=just4me.albertsons, args=(authentication,)).start()
-    return 'Running Albertsons Coupons with env.py'
+    return render_template('albertsons.html', title='Albertsons')
