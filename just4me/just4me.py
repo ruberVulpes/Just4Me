@@ -20,6 +20,6 @@ def vons(authentication: Authentication):
 
 def _base_site(authentication: Authentication, site: Type[BaseSite]):
     chrome_options = Options()
-    # chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless")
     browser = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
     site(browser, authentication=authentication).drive()
