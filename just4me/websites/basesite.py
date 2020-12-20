@@ -1,19 +1,15 @@
 import logging
 import time
-from collections import namedtuple
 from typing import Callable, List
+
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, StaleElementReferenceException, \
     ElementClickInterceptedException
 from selenium.webdriver.remote.webelement import WebElement
-from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.support.wait import WebDriverWait
 
-LoginElements = namedtuple("LoginElements", ["email_entry_id", "password_entry_id", "sign_in_submit_id"])
-CouponElement = namedtuple("CouponElements", ["coupon_button_class", "coupon_button_text"])
-Authentication = namedtuple("Authentication", ["email", "password"])
-
-TextInput = namedtuple("TextInput", ["element_id", "keys"])
+from just4me.websites import *
 
 logger = logging.getLogger(__name__)
 
