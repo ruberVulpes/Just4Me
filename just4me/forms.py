@@ -6,5 +6,5 @@ from wtforms.validators import DataRequired, Email
 class CouponWebsiteLoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
-    token = PasswordField('Token', validators=[DataRequired()])
+    token = StringField('Token', validators=[DataRequired()])
     submit = SubmitField('Start')
