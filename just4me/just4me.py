@@ -1,7 +1,6 @@
 from typing import Type
 
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
 import env
@@ -10,14 +9,13 @@ from just4me.websites.albertsons import Albertsons
 from just4me.websites.basesite import BaseSite
 from just4me.websites.vons import Vons
 
-CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-GOOGLE_CHROME_BIN = '/app/.apt/usr/bin/google-chrome'
 chrome_options = webdriver.ChromeOptions()
-chrome_options.binary_location = GOOGLE_CHROME_BIN
-chrome_options.add_argument("--headless")
-chrome_options.add_argument('--disable-gpu')
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("--no-sandbox")
+if env.is_prod:
+    chrome_options.binary_location = env.chromedriver_bin
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
 
 
 def albertsons(authentication: Authentication):
@@ -29,7 +27,8 @@ def vons(authentication: Authentication):
 
 
 def _base_site(authentication: Authentication, site: Type[BaseSite]):
-    # chrome_options = Options()
-    # chrome_options.add_argument("--headless")
-    browser = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=chrome_options)
+    if env.is_prod:
+        browser = webdriver.Chrome(executable_path=env.chromedriver_path, options=chrome_options)
+    else:
+        browser = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
     site(browser, authentication=authentication).drive()
