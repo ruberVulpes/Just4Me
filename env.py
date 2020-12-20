@@ -1,5 +1,9 @@
 import os
 
+# region Flask
+secret_key = os.environ['SECRET_KEY']
+# endregion
+
 # region Vons
 __vons_email__ = os.environ['vons_email']
 __vons_password__ = os.environ['vons_password']
