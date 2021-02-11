@@ -1,13 +1,18 @@
 import os
 
-# region Vons
-__vons_email__ = os.environ['vons_email']
-__vons_password__ = os.environ['vons_password']
-vons_auth = (__vons_email__, __vons_password__)
+env = os.environ.get('ENV', 'dev')
+is_prod = env.lower() == 'prod'
+
+# region Selenium on Heroku
+chromedriver_path = os.environ.get('CHROMEDRIVER_PATH')
+chromedriver_bin = os.environ.get('GOOGLE_CHROME_BIN')
+if is_prod:
+    assert chromedriver_path is not None
+    assert chromedriver_bin is not None
 # endregion
 
+token = os.environ['TOKEN']
 
-# region Albertsons
-# They're the same authentication
-albertsons_auth = (__vons_email__, __vons_password__)
+# region Flask
+secret_key = os.environ['SECRET_KEY']
 # endregion

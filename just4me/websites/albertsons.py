@@ -1,7 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from websites.basesite import BaseSite, Authentication, LoginElements, CouponElement
+from just4me.websites import *
+from just4me.websites.basesite import BaseSite
 
 
 class Albertsons(BaseSite):
