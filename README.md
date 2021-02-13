@@ -35,3 +35,13 @@ The deployment is automated using the [Deploy to Heroku](https://github.com/mark
 #### Dependency Installation 
 
 `pip3 install -r requirements.txt`
+
+## Environment Variables
+
+```
+SECRET_KEY: A secret key for Flask
+TOKEN: A secret token for access control to running the automation
+CHROMEDRIVER_PATH: The path to the heroku chrome driver build pack executable 
+GOOGLE_CHROME_BIN: The path to the heroku chrome driver build pack binary 
+ENV: Prod/Dev for running locally without heroku buildpacks requirements
+``` 
