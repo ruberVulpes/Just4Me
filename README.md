@@ -71,7 +71,8 @@ ENV: Prod/Dev for running locally without heroku buildpacks requirements
 
 The website is live at https://wfox-just4me.herokuapp.com/
 
-TODO: Add gif of Webdriver running
+Automation Example, this runs headless on Heroku
+![automation example](readme/automation-example.gif)
 
 ## Deployment 
 The bot is currently deployed on [Heroku](https://heroku.com/) using free dynos.
