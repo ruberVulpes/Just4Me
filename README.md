@@ -17,12 +17,6 @@ Help get me off Heroku free dynos
 
 [![](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/donate?hosted_button_id=U65R5REYQXAR8)
 
-
-## Deployment 
-The bot is currently deployed on [Heroku](https://heroku.com/) using free dynos.
-
-The deployment is automated using the [Deploy to Heroku](https://github.com/marketplace/actions/deploy-to-heroku) Action from [AkhileshNS](https://github.com/AkhileshNS).  
-
 ## Dependencies 
 
 * [selenium](https://pypi.org/project/selenium/)
@@ -45,3 +39,54 @@ CHROMEDRIVER_PATH: The path to the heroku chrome driver build pack executable
 GOOGLE_CHROME_BIN: The path to the heroku chrome driver build pack binary 
 ENV: Prod/Dev for running locally without heroku buildpacks requirements
 ``` 
+
+* `ENV` is optional and will default to dev if left unfilled
+* `CHROMEDRIVER_PATH` and `GOOGLE_CHROME_BIN` are not required in a dev environment as they're not used for local run
+
+## How to Run
+
+#### Pre-Requisites
+* [Install the Dependencies](#dependency-installation)
+* Set the [Environment Variables](#environment-variables)
+     * Running via CLI 
+        * `export SECRET_KEY=xxxx`
+        * `export TOKEN=xxxx` 
+     * Running via `heroku local`
+        * Populate a `.env` file with the secrets
+            * ```
+                 SECRET_KEY=xxxx
+                 TOKEN=xxxx
+              ```
+#### Running
+* Via CLI
+    * `python app.py`
+    
+* Via `heroku local`
+    * Windows
+        * `heroku local -f Procfile.windows`
+    * Not Windows
+        * `heroku local`
+
+## Example
+
+The website is live at https://wfox-just4me.herokuapp.com/
+
+TODO: Add gif of Webdriver running
+
+## Deployment 
+The bot is currently deployed on [Heroku](https://heroku.com/) using free dynos.
+
+The deployment is automated using the [Deploy to Heroku](https://github.com/marketplace/actions/deploy-to-heroku) Action from [AkhileshNS](https://github.com/AkhileshNS).  
+
+## Acknowledgements
+
+* [SalvatoreTosti/flask-template](https://github.com/SalvatoreTosti/flask-template)
+    * For getting me started on Heroku
+    
+* Corey Schafer's [Full-Featured Web App](https://www.youtube.com/watch?v=MwZwr5Tvyxo&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH)
+    * For getting me comfortable with a Flask website
+
+## Next Steps
+
+* Notify User on Completion/Failed Login
+* Fix Selenium wait for element to load/remove sleep calls
