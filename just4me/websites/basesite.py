@@ -76,7 +76,7 @@ class BaseSite:
         logger.info(f"Successfully Logged into Site: {self.site_name}")
 
     def __get_to_login_page__(self) -> None:
-        raise NotImplemented
+        raise NotImplementedError
 
     def wait_for_site_load(self) -> bool:
         logger.info(f"Waiting for site load for Site: {self.site_name}")
