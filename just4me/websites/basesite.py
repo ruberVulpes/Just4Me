@@ -9,7 +9,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-from just4me.websites import *
+from just4me.websites import LoginElements, CouponElement, Authentication, TextInput
 
 logger = logging.getLogger(__name__)
 
@@ -152,10 +152,9 @@ class BaseSite:
             self.browser.get(self.home_url)
             self.browser.get(self.coupons_url)
             return True
-        else:
-            logger.error(f"Max Retries hit for url: {base_msg()}")
-            self.__quit_browser__()
-            return False
+        logger.error(f"Max Retries hit for url: {base_msg()}")
+        self.__quit_browser__()
+        return False
 
     def __load_more_logger_helper__(self) -> None:
         if self.times_load_more % self.load_more_log_frequency == 0:
