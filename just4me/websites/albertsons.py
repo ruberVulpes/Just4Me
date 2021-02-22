@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from just4me.websites import *
+from just4me.websites import LoginElements, CouponElement, Authentication, TextInput
 from just4me.websites.basesite import BaseSite
 
 

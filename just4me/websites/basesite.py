@@ -9,7 +9,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 
-from just4me.websites import *
+from just4me.websites import LoginElements, CouponElement, Authentication, TextInput
 
 logger = logging.getLogger(__name__)
 
