@@ -11,9 +11,8 @@ from just4me.websites import UserPass
 
 
 @app.route(rule='/')
-@app.route(rule='/home')
-def home():
-    return render_template('home.html')
+def index():
+    return render_template('index.html')
 
 
 @app.route(rule='/websites/<website>', methods=['GET', 'POST'])
@@ -29,7 +28,7 @@ def coupon_websites(website: str):
         if form.token.data == env.token:
             logger.info(f'Clicking coupons on {website} for {form.email.data}')
             Thread(target=target, args=(UserPass(form.email.data, form.password.data),)).start()
-            flash(f"We're clicking your coupons for {website}", 'success')
-            return redirect(url_for('home'))
+            flash(f"We're clicking your coupons for {website.title()}", 'success')
+            return redirect(url_for('index'))
         flash('Invalid Token', 'danger')
     return render_template('coupon_website.html', title=website.title(), form=form)
