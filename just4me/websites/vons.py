@@ -16,9 +16,6 @@ class Vons(BaseSite):
 
     load_more_class = 'load-more-container'
 
-    def __init__(self, browser: webdriver.WebDriver, user_pass: UserPass):
-        super().__init__(browser, user_pass)
-
     def drive(self):
         # Failed to log in
         if not self._login():

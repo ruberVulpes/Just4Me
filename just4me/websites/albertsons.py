@@ -12,6 +12,3 @@ class Albertsons(Vons):
     home_url = 'https://www.albertsons.com/'
     login_url = 'https://www.albertsons.com/account/sign-in.html'
     coupons_url = 'https://www.albertsons.com/justforu/coupons-deals.html'
-
-    def __init__(self, browser: webdriver.WebDriver, user_pass: UserPass):
-        super().__init__(browser, user_pass)
