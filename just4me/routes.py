@@ -7,7 +7,7 @@ from just4me import app
 from just4me import just4me
 from just4me import logger
 from just4me.forms import CouponWebsiteLoginForm
-from just4me.websites import Authentication
+from just4me.websites import UserPass
 
 
 @app.route(rule='/')
@@ -28,7 +28,7 @@ def coupon_websites(website: str):
     if form.validate_on_submit():
         if form.token.data == env.token:
             logger.info(f'Clicking coupons on {website} for {form.email.data}')
-            Thread(target=target, args=(Authentication(form.email.data, form.password.data),)).start()
+            Thread(target=target, args=(UserPass(form.email.data, form.password.data),)).start()
             flash(f"We're clicking your coupons for {website}", 'success')
             return redirect(url_for('home'))
         flash('Invalid Token', 'danger')
