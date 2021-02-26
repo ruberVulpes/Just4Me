@@ -1,9 +1,8 @@
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
-from selenium.webdriver.remote import webdriver
 
-from just4me.websites import BaseSite, UserPass, logger
+from just4me.websites import BaseSite, logger
 
 
 class Vons(BaseSite):

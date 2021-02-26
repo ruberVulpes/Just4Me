@@ -1,6 +1,3 @@
-from selenium.webdriver.remote import webdriver
-
-from just4me.websites import UserPass
 from just4me.websites.vons import Vons
 
 
