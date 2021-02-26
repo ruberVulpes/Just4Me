@@ -1,7 +1,10 @@
+import logging
 from collections import namedtuple
 
-LoginElements = namedtuple("LoginElements", ["email_entry_id", "password_entry_id", "sign_in_submit_id"])
-CouponElement = namedtuple("CouponElements", ["coupon_button_class", "coupon_button_text"])
-Authentication = namedtuple("Authentication", ["email", "password"])
+logger = logging.getLogger(__name__)
 
-TextInput = namedtuple("TextInput", ["element_id", "keys"])
+UserPass = namedtuple("UserPass", ["username", "password"])
+
+from just4me.websites.basesite import BaseSite
+from just4me.websites.vons import Vons
+from just4me.websites.albertsons import Albertsons
