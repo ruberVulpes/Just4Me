@@ -14,6 +14,7 @@ class Vons(BaseSite):
     coupons_url = 'https://www.vons.com/justforu/coupons-deals.html'
 
     load_more_class = 'load-more-container'
+    cookie_banner_close_id = 'cookieConsentClose'
 
     def drive(self):
         # Failed to log in
@@ -40,6 +41,12 @@ class Vons(BaseSite):
         # Get to login page and wait to load
         with self._wait_for_page_load():
             self.browser.get(self.login_url)
+
+        # Close Cookie Consent Banner if it exists
+        try:
+            self.browser.find_element_by_id(self.cookie_banner_close_id).click()
+        except NoSuchElementException:
+            pass
 
         # Fill login info
         for login_element_id, login_element_text in zip(login_element_ids, self.user_pass):
