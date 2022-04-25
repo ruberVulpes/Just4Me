@@ -3,4 +3,4 @@ webdriver-manager==3.5.2
 flask==2.0.2
 gunicorn==20.1.0
 Flask-WTF==1.0.0
-email_validator==1.1.3
+email_validator==1.2.0
